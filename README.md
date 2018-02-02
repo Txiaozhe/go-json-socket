@@ -6,14 +6,20 @@
 ## quick start
 
 ```go
+import (
+	"log"
+	jsonsocket "github.com/Txiaozhe/go-json-socket"
+)
+
 func main() {
+	// connect to remote service.
 	conn, err := jsonsocket.Connect("127.0.0.1:9838")
 	if err != nil {
 		log.Println("connect error: ", err)
 	}
 
 	token_info := Token{
-		"Bearer eyJ1aWQiOjEyNTE4NDY3NDgsInR5cGUiOiJ0b29sIn0=.NWRhMWNlOTRiMTFjNmQwODM5YjA2Y2E5ZjZjMTBkZGQ0NDVjMjg2ZjlhNmY0MjkyYTExNWNhNDA1ZGZiNDQyNA==",
+		"Bearer eyJ1aWQiOjEyNTE4NDY3NDgsInR5cGUiOiJ0b29sIn0=.NWRhMWNlOTRiMTFjNmQwODM5YjA2Y2E5ZjZjMTBk",
 	}
 	auth_info := Auth{
 		"tool",
@@ -21,6 +27,7 @@ func main() {
 		token_info,
 	}
 
+    // send a message to remote service.
 	ch, err := jsonsocket.SendMessage(conn, auth_info)
 	if err != nil {
 		log.Println("send msg error: ", err)
@@ -28,6 +35,7 @@ func main() {
 
 	log.Println(<-ch)
 
+    // handle the message from remote service.
 	ch1, err := jsonsocket.HandleMessage(conn)
 	if err != nil {
 		log.Println("handle msg error: ", err)
