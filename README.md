@@ -1,9 +1,13 @@
 # go-json-socket
 
-## A simple RPC tool, because RPC is needed to communicate with go services and node services in the encoding process, and [node-json-socket](https://github.com/sebastianseilund/node-json-socket) library is used for RPC communication between node services, so this library is written for better compatibility with node services.
-## 一个简易的rpc工具，由于编码过程中需要使用rpc进行go服务和node服务的通信，而node服务之间使用[node-json-socket](https://github.com/sebastianseilund/node-json-socket)库来进行rpc通信，为了更好地与node服务兼容，因此写了这个库。
+#### A simple RPC tool, because RPC is needed to communicate with go services and node services in the encoding process, and [node-json-socket](https://github.com/sebastianseilund/node-json-socket) library is used for RPC communication between node services, so this library is written for better compatibility with node services.
+#### 一个简易的rpc工具，由于编码过程中需要使用rpc进行go服务和node服务的通信，而node服务之间使用[node-json-socket](https://github.com/sebastianseilund/node-json-socket)库来进行rpc通信，为了更好地与node服务兼容，因此写了这个库。
 
 ## quick start
+
+```shell
+$ go get github.com/Txiaozhe/go-json-socket
+```
 
 ```go
 import (
