@@ -50,39 +50,6 @@ func main() {
 }
 ```
 
-* nodejs server
-
-```shell
-$ npm install json-socket --save
-```
-
-```javascript
-const net = require('net');
-const JsonSocket = require('json-socket');
-
-const port = 3001;
-const server = net.createServer();
-server.listen(port);
-server.on('connection', function(socket) {
-
-  socket = new JsonSocket(socket);
-
-  socket.on('message', function(message) {
-    console.log('message');
-    console.log(message);
-  });
-
-  socket.on('error', function(err) {
-    console.log('error');
-    console.log(err);
-  });
-
-  socket.sendMessage({code: 0, data: {mag: 'success'}}, err => {
-    console.log(err);
-  });
-});
-```
-
 * go client
 ```go
 import (
@@ -123,4 +90,58 @@ func main() {
 	res := <-ch1
 	log.Println(res, res.Len, res.Data)
 }
+```
+
+#### this two go client and server can communicate with this two nodejs server and client.
+#### 以上两个go实现的client和server可以与以下两个nodejs实现的client和server进行通信
+
+* nodejs server
+
+```shell
+$ npm install json-socket --save
+```
+
+```javascript
+const net = require('net');
+const JsonSocket = require('json-socket');
+
+const port = 3001;
+const server = net.createServer();
+server.listen(port);
+server.on('connection', function(socket) {
+
+  socket = new JsonSocket(socket);
+
+  socket.on('message', function(message) {
+    console.log('message');
+    console.log(message);
+  });
+
+  socket.on('error', function(err) {
+    console.log('error');
+    console.log(err);
+  });
+
+  socket.sendMessage({code: 0, data: {mag: 'success'}}, err => {
+    console.log(err);
+  });
+});
+```
+
+* nodejs client
+
+```javascript
+const net = require('net');
+const JsonSocket = require('json-socket');
+
+const port = 3001;
+const host = '127.0.0.1';
+const socket = new JsonSocket(new net.Socket());
+socket.connect(port, host);
+socket.on('connect', function() {
+    socket.sendMessage({code: 0, data: {mag: 'success'}});
+    socket.on('message', function(message) {
+        console.log('The message is: ' + message);
+    });
+});
 ```
