@@ -1,7 +1,7 @@
 package main
 
 import (
-	jsonsocket "github.com/Txiaozhe/go-json-socket"
+	jsonsocket "go-json-socket"
 	"log"
 )
 
@@ -11,27 +11,34 @@ type Info struct {
 }
 
 func main() {
-	conn, err := jsonsocket.Listen("127.0.0.1:3001")
+	listener, err := jsonsocket.Listen("127.0.0.1:3001")
 	if err != nil {
 		log.Println("listen error: ", err)
 	}
 
-	ch, err := jsonsocket.HandleMessage(conn)
-	if err != nil {
-		log.Println("handel message error: ", err)
-	}
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Println("accept error: ", err)
+		}
 
-	res := <-ch
-	log.Println(res)
+		ch, err := jsonsocket.HandleMessage(conn)
+		if err != nil {
+			log.Println("handel message error: ", err)
+		}
 
-	msg := Info{
-		0,
-		"success",
-	}
-	ch1, err := jsonsocket.SendMessage(conn, msg)
-	if err != nil {
-		log.Println("response error:", err)
-	}
+		res := <-ch
+		log.Println(res)
 
-	log.Println("send msg length: ", <-ch1)
+		msg := Info{
+			0,
+			"success",
+		}
+		ch1, err := jsonsocket.SendMessage(conn, msg)
+		if err != nil {
+			log.Println("response error:", err)
+		}
+
+		log.Println("send msg length: ", <-ch1)
+	}
 }

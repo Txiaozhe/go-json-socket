@@ -1,11 +1,12 @@
 package main
 
 import (
-	jsonsocket "github.com/Txiaozhe/go-json-socket"
+	jsonsocket "go-json-socket"
 	"log"
 )
 
 type Token struct {
+	Head  string `json:"head"`
 	Token string `json:"token"`
 }
 
@@ -22,7 +23,8 @@ func main() {
 	}
 
 	token_info := Token{
-		"Bearer eyJ1aWQiOjEyNTE4NDY3NDgsInR5cGUiOiJ0b29sIn0=.NWRhMWNlOTRiMTFjNmQwODM5YjA2Y2E5ZjZjMTBkZGQ0NDV",
+		"Bearer",
+		"eyJ1aWQiOjEyNTE4NDY3NDgsInR5cGUiOiJ0b29sIn0=.NWRhMWNlOTRiMTFjNmQwODM5YjA2Y2E5ZjZjMTBkZGQ0NDV",
 	}
 	auth_info := Auth{
 		"tool",
@@ -43,5 +45,5 @@ func main() {
 	}
 
 	res := <-ch1
-	log.Println(res, res.Len, res.Data)
+	log.Println("response:", res.Len, res.Data)
 }

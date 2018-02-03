@@ -24,20 +24,13 @@ func Connect(addr string) (net.Conn, error) {
 	return conn, nil
 }
 
-func Listen(addr string) (net.Conn, error) {
+func Listen(addr string) (net.Listener, error) {
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
 		return nil, err
 	}
 
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			return nil, err
-		}
-
-		return conn, nil
-	}
+	return listener, nil
 }
 
 func SendMessage(conn net.Conn, d interface{}) (chan int, error) {
