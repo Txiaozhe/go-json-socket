@@ -40,5 +40,6 @@ func main() {
 		}
 
 		log.Println("send msg length: ", <-ch1)
+		conn.Close()
 	}
 }
