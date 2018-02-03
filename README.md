@@ -9,6 +9,81 @@
 $ go get github.com/Txiaozhe/go-json-socket
 ```
 
+* go server
+```go
+package main
+
+import (
+	jsonsocket "github.com/Txiaozhe/go-json-socket"
+	"log"
+)
+
+type Info struct {
+	Code int    `json:"code"`
+	Data string `json:"data"`
+}
+
+func main() {
+	conn, err := jsonsocket.Listen("127.0.0.1:3001")
+	if err != nil {
+		log.Println("listen error: ", err)
+	}
+
+	ch, err := jsonsocket.HandleMessage(conn)
+	if err != nil {
+		log.Println("handel message error: ", err)
+	}
+
+	res := <-ch
+	log.Println(res)
+
+	msg := Info{
+		0,
+		"success",
+	}
+	ch1, err := jsonsocket.SendMessage(conn, msg)
+	if err != nil {
+		log.Println("response error:", err)
+	}
+
+	log.Println("send msg length: ", <-ch1)
+}
+```
+
+* nodejs server
+
+```shell
+$ npm install json-socket --save
+```
+
+```javascript
+const net = require('net');
+const JsonSocket = require('json-socket');
+
+const port = 3001;
+const server = net.createServer();
+server.listen(port);
+server.on('connection', function(socket) {
+
+  socket = new JsonSocket(socket);
+
+  socket.on('message', function(message) {
+    console.log('message');
+    console.log(message);
+  });
+
+  socket.on('error', function(err) {
+    console.log('error');
+    console.log(err);
+  });
+
+  socket.sendMessage({code: 0, data: {mag: 'success'}}, err => {
+    console.log(err);
+  });
+});
+```
+
+* go client
 ```go
 import (
 	"log"

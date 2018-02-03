@@ -16,12 +16,28 @@ type Response struct {
 }
 
 func Connect(addr string) (net.Conn, error) {
-	conn, err := net.DialTimeout("tcp", "127.0.0.1:9838", 15*time.Second)
+	conn, err := net.DialTimeout("tcp", addr, 15*time.Second)
 	if err != nil {
 		return nil, err
 	}
 
 	return conn, nil
+}
+
+func Listen(addr string) (net.Conn, error) {
+	listener, err := net.Listen("tcp", addr)
+	if err != nil {
+		return nil, err
+	}
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			return nil, err
+		}
+
+		return conn, nil
+	}
 }
 
 func SendMessage(conn net.Conn, d interface{}) (chan int, error) {
@@ -66,7 +82,7 @@ func HandleMessage(conn net.Conn) (chan Response, error) {
 		str := reg.FindStringSubmatch(string(buf))
 
 		dataLen, err := strconv.Atoi(str[1])
-		if err != nil{
+		if err != nil {
 			ch <- Response{0, err}
 		}
 
